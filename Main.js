@@ -19,7 +19,7 @@ const { DataTypes } = require("sequelize");
 
 const Teacher = require("./models/teacher")(sequelize, DataTypes),
   classDetail = require("./models/classdetail")(sequelize, DataTypes),
-  studentDetail = require("./models/studenrdetail")(sequelize, DataTypes),
+  studentDetail = require("./models/studentdetail")(sequelize, DataTypes),
   Attendance = require("./models/attendance")(sequelize, DataTypes);
 app.use(
   session({
@@ -388,7 +388,7 @@ app.delete("/Delete/Batch/:id", async (request, response) => {
       String(request.user.id),
       String(request.params.id)
     );
-    let deleteStudent = await studentDetail.deleteStudent(request.params.id);
+    let deleteStudent = await studentDetail.removeStudent(request.params.id);
     if (DeleteBatch) {
       request.flash("success", "Successfully Deleted");
     } else {
