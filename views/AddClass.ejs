@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add New Class</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      class="flex items-center justify-center h-screen w-full bg-slate-50 text-[#414141] font-medium text-xl"
+    >
+      <div class="bg-white p-3 rounded">
+        <%-include ("./message.ejs")%>
+        <div class="titlec text-center my-3">Add New Class</div>
+        <form action="/AddNewClass" method="post">
+          <label
+            for="title"
+            class="block mb-2 font-medium text-gray-900 dark:text-white"
+            >Class Name:</label
+          >
+          <div class="relative mb-6">
+            <input
+              type="text"
+              id="title"
+              name="classTitle"
+              class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="Enter Class Title"
+            />
+          </div>
+          <label
+            for="stime"
+            class="block mb-2 font-medium text-gray-900 dark:text-white"
+            >Class Start Time:</label
+          >
+          <div class="relative mb-6">
+            <input
+              type="time"
+              id="stime"
+              name="startTime"
+              class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              required
+            />
+          </div>
+          <label
+            for="etime"
+            class="block mb-2 font-medium text-gray-900 dark:text-white"
+            >Class End Time:</label
+          >
+          <div class="relative mb-6">
+            <input
+              type="time"
+              id="etime"
+              name="endTime"
+              class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              required
+            />
+          </div>
+          <div class="submit">
+            <button
+              type="submit"
+              class="w-full duration-300 text-white text-xl bg-green-500 hover:bg-green-600 focus:outline-none font-medium rounded-lg px-5 py-2.5 text-center inline-flex items-center justify-center dark:hover:bg-[#050708]/30 mr-2 mb-2"
+            >
+              Add
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

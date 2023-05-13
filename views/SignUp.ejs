@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign Up</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      .signup {
+        max-width: 1280px;
+        width: 30%;
+      }
+      @media (max-width: 1000px) {
+        .signup {
+          width: 80%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      class="flex h-screen w-full justify-center items-center bg-[#e2e8f0] font-medium"
+    >
+      <div class="signup bg-white p-6 rounded">
+        <%-include ("./message.ejs")%>
+        <div class="title text-2xl text-center my-3">SignUp/Register</div>
+        <form action="/Admin/SignUp" method="post">
+          <div>
+            <div class="relative mb-6">
+              <label
+                for="fName"
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >Your First Name</label
+              >
+
+              <input
+                type="text"
+                id="fName"
+                name="firstName"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="Enter Your First Name"
+              />
+            </div>
+          </div>
+          <label
+            for="email"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >Your Email</label
+          >
+          <div class="relative mb-6">
+            <div
+              class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
+            >
+              <svg
+                aria-hidden="true"
+                class="w-5 h-5 text-gray-500 dark:text-gray-400"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"
+                ></path>
+                <path
+                  d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"
+                ></path>
+              </svg>
+            </div>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="xyz@gmail.com"
+            />
+          </div>
+          <label
+            for="pass"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >Your Password</label
+          >
+          <div class="relative mb-6">
+            <div
+              class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                fill="currentColor"
+                class="bi bi-key"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M0 8a4 4 0 0 1 7.465-2H14a.5.5 0 0 1 .354.146l1.5 1.5a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0L13 9.207l-.646.647a.5.5 0 0 1-.708 0L11 9.207l-.646.647a.5.5 0 0 1-.708 0L9 9.207l-.646.647A.5.5 0 0 1 8 10h-.535A4 4 0 0 1 0 8zm4-3a3 3 0 1 0 2.712 4.285A.5.5 0 0 1 7.163 9h.63l.853-.854a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.793-.793-1-1h-6.63a.5.5 0 0 1-.451-.285A3 3 0 0 0 4 5z"
+                />
+                <path d="M4 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
+              </svg>
+            </div>
+            <input
+              type="password"
+              id="pass"
+              name="password"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="Enter Your Password"
+            />
+          </div>
+          <div class="submit">
+            <button
+              type="submit"
+              class="w-full text-white text-xl bg-[#24292F] hover:bg-[#24292F]/90 focus:outline-none font-medium rounded-lg px-5 py-2.5 text-center inline-flex items-center justify-center dark:hover:bg-[#050708]/30 mr-2 mb-2"
+            >
+              SignUp
+            </button>
+          </div>
+        </form>
+        <div class="text-sm text-left">
+          Already have an Account?<a href="/" class="hover:underline">Login</a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

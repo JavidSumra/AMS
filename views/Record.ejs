@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add Appointment</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-slate-100">
+    <div class="flex items-center justify-center py-8 px-4 flex-col">
+      <div class="md:p-8 p-5 dark:bg-gray-800 bg-white rounded-t">
+        <div class="px-4 flex items-center justify-between">
+          <span
+            tabindex="0"
+            class="month focus:outline-none text-base font-bold dark:text-gray-100 text-gray-800"
+            >October 2020</span
+          >
+          <div class="mover flex items-center">
+            <button
+              id="moveback"
+              aria-label="calendar backward"
+              class="focus:text-gray-400 hover:text-gray-400 text-gray-800 dark:text-gray-100"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="icon icon-tabler icon-tabler-chevron-left"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                fill="none"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <polyline points="15 6 9 12 15 18" />
+              </svg>
+            </button>
+            <button
+              aria-label="calendar forward"
+              class="focus:text-gray-400 hover:text-gray-400 ml-3 text-gray-800 dark:text-gray-100"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="icon icon-tabler icon-tabler-chevron-right"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                fill="none"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <polyline points="9 6 15 12 9 18" />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="day flex items-center justify-center">
+          <div class="px-2 py-2 cursor-pointer flex w-full justify-center">
+            <p class="text-base text-gray-500 dark:text-gray-100 font-medium">
+              Sun
+            </p>
+          </div>
+          <div class="px-2 py-2 cursor-pointer flex w-full justify-center">
+            <p class="text-base text-gray-500 dark:text-gray-100 font-medium">
+              Mon
+            </p>
+          </div>
+          <div class="px-2 py-2 cursor-pointer flex w-full justify-center">
+            <p class="text-base text-gray-500 dark:text-gray-100 font-medium">
+              Tue
+            </p>
+          </div>
+          <div class="px-2 py-2 cursor-pointer flex w-full justify-center">
+            <p class="text-base text-gray-500 dark:text-gray-100 font-medium">
+              Wed
+            </p>
+          </div>
+          <div class="px-2 py-2 cursor-pointer flex w-full justify-center">
+            <p class="text-base text-gray-500 dark:text-gray-100 font-medium">
+              Thu
+            </p>
+          </div>
+          <div class="px-2 py-2 cursor-pointer flex w-full justify-center">
+            <p class="text-base text-gray-500 dark:text-gray-100 font-medium">
+              Fri
+            </p>
+          </div>
+          <div class="px-2 py-2 cursor-pointer flex w-full justify-center">
+            <p class="text-base text-gray-500 dark:text-gray-100 font-medium">
+              Sat
+            </p>
+          </div>
+        </div>
+        <div class="dates grid grid-cols-7"></div>
+        <div class="text-center mt-4">
+          <a
+            class="bg-black text-white rounded p-2"
+            href="/classDetail/<%=Id%>"
+          >
+            Go Back
+          </a>
+        </div>
+      </div>
+      <% if (sta.length > 0){%>
+      <div class="flex flex-row justify-between items-center">
+        <div
+          class="bg-white mx-2 border border-black p-2 mt-2 text-center text-2xl rounded-t-xl shadow-md"
+        >
+          <%=presentStudent.length%>
+          <div class="text-blue-600 font-medium text-xl">Present</div>
+        </div>
+        <div
+          class="bg-white mx-2 border border-black p-2 mt-2 text-center text-2xl rounded-t-xl shadow-md"
+        >
+          <%=sta.length - presentStudent.length%>
+          <div class="text-blue-600 font-medium text-xl">Absent</div>
+        </div>
+        <div
+          class="bg-white mx-2 border border-black p-2 mt-2 text-center text-2xl rounded-t-xl shadow-md"
+        >
+          <%=sta.length%>
+          <div class="text-blue-600 font-medium text-xl">Total</div>
+        </div>
+      </div>
+
+      <table
+        class="border rounded shadow-sm my-2 bg-white text-2xl text-center"
+      >
+        <thead>
+          <tr>
+            <th class="p-2">No.</th>
+            <th class="p-2">Name</th>
+            <th class="p-2">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% sta.map((student,index)=>{%>
+          <tr>
+            <td><%=index + 1%></td>
+            <td><%=student.Name%></td>
+            <% if(student.Status == "true"){ %>
+            <td class="text-green-300">Present</td>
+            <%}else{%>
+            <td class="text-red-400">Absent</td>
+            <%}%>
+          </tr>
+          <%})%>
+        </tbody>
+      </table>
+      <%}else{%>
+      <div
+        class="flex justify-center items-center p-5 bg-white my-5 rounded text-3xl"
+      >
+        Attendance Not Filled !
+      </div>
+      <%}%>
+    </div>
+
+    <script>
+      let today = new Date().toISOString().split("T")[0];
+
+      let span = " ",
+        div = " ",
+        i;
+      // Calendar
+      let month = document.querySelector(".month"),
+        dates = document.querySelector(".dates"),
+        date = new Date(),
+        currentMonth = date.getMonth(),
+        currentYear = date.getFullYear();
+
+      let arrofmonth = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+      ];
+
+      const createCal = () => {
+        month.innerHTML = `${arrofmonth[date.getMonth()]} ${currentYear}`;
+        let firstdayofCurrentMonth = new Date(
+            currentYear,
+            currentMonth,
+            1
+          ).getDay(),
+          lastdateofCurrentMonth = new Date(
+            currentYear,
+            currentMonth + 1,
+            0
+          ).getDate(),
+          lastdayofCurrentMonth = new Date(
+            currentYear,
+            currentMonth,
+            lastdateofCurrentMonth
+          ).getDay(),
+          lastdateofMonth = new Date(currentYear, currentMonth, 0).getDate();
+
+        for (i = firstdayofCurrentMonth; i > 0; i--) {
+          span += `<a href="/Attendance/Recorde/<%=Id%>/${
+            lastdateofMonth - i + 1
+          }/${currentMonth}/${currentYear}" class="px-2 py-2 cursor-pointer flex w-full justify-center">
+                                            <p class="w-full h-full text-center text-gray-500 dark:text-gray-100 font-medium hover:bg-gray-500 hover:text-white rounded-full">${
+                                              lastdateofMonth - i + 1
+                                            }</p>
+                                        </a>`;
+          // console.log(lastdateofMonth - i + 1);
+        }
+        for (i = 1; i <= lastdateofCurrentMonth; i++) {
+          let isToday =
+            i === date.getDate() &&
+            date.getMonth() === new Date().getMonth() &&
+            date.getFullYear() === new Date().getFullYear();
+
+          span += `<a href="/Attendance/Recorde/<%=Id%>/${i}/${
+            currentMonth + 1
+          }/${currentYear}" class="px-2 py-2 cursor-pointer flex w-full justify-center">
+                                            <p ${
+                                              isToday
+                                                ? 'class="w-full h-full text-center text-base text-white font-medium bg-black rounded-full"'
+                                                : 'class="w-full h-full text-center text-gray-900 dark:text-gray-100 font-medium hover:bg-gray-300 rounded-full "'
+                                            }>${i}</p>
+                                            
+                                        </a>`;
+        }
+        for (i = lastdayofCurrentMonth; i < 6; i++) {
+          span += `<a href="/Attendance/Recorde/<%=Id%>/${
+            i - lastdayofCurrentMonth + 1
+          }/${
+            currentMonth + 2
+          }/${currentYear}" class="px-2 py-2 cursor-pointer flex w-full justify-center">
+                                            <p class="w-full h-full text-center text-gray-500 dark:text-gray-100 font-medium hover:bg-gray-500 hover:text-white  rounded-full">${
+                                              i - lastdayofCurrentMonth + 1
+                                            }</p>
+                                        </a>`;
+        }
+        dates.innerHTML = span;
+      };
+      createCal();
+      const changeCal = document.querySelectorAll(".mover button");
+      console.log(changeCal);
+      changeCal.forEach((change) => {
+        change.addEventListener("click", () => {
+          span = " ";
+          currentMonth =
+            change.id === "moveback" ? currentMonth - 1 : currentMonth + 1;
+
+          if (currentMonth < 0 || currentMonth > 11) {
+            date = new Date(currentYear, currentMonth, new Date().getDate());
+            currentYear = date.getFullYear();
+            currentMonth = date.getMonth();
+          } else {
+            date = new Date(currentYear, currentMonth, new Date().getDate());
+          }
+          createCal();
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fill Attendance</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background: #f1f5f9;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="">
+      <div class="navBar bg-white m-2 rounded p-2 flex text-2xl">
+        <div
+          class="date border-r border-black p-2 flex items-center justify-center"
+        >
+          Date:<%=today%>
+        </div>
+        <div
+          class="w-full border-r border-black p-2 flex items-center justify-center"
+        >
+          Students:<%=students.length%>
+        </div>
+
+        <div class="w-full flex items-center justify-center">
+          Add Today Attendance
+        </div>
+      </div>
+      <%-include ("./message.ejs")%> <% if ( students.length > 0 ) { %>
+      <div class="m-3">
+        <form action="/Attendance/<%=Id%>" method="post">
+          <table class="w-full text-center font-medium text-gray-500">
+            <thead
+              class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+            >
+              <tr class="bg-slate-400">
+                <th scope="col" class="px-6 py-3">No</th>
+                <th scope="col" class="px-6 py-3">Student Name</th>
+                <th scope="col" class="px-6 py-3">Student Number</th>
+                <th>Present</th>
+                <th>Absent</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white border-b">
+              <% students.map((student,index)=>{ %>
+              <tr class="odd:bg-white even:bg-blue-100 text-2xl">
+                <td
+                  scope="row"
+                  class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                >
+                  <%=index+1%>
+                </td>
+                <td class="px-6 py-4"><%=student.SName%></td>
+                <td class="px-6 py-4"><%=student.SNumber%></td>
+                <td>
+                  <input type="checkbox" name="true-<%=student.id%>" id="" />
+                </td>
+                <td>
+                  <input type="checkbox" name="false-<%=student.id%>" id="" />
+                </td>
+              </tr>
+              <% }) %>
+            </tbody>
+          </table>
+          <div
+            class="w-full flex items-center justify-center my-2 cursor-pointer"
+          >
+            <input
+              type="submit"
+              value="Submit"
+              class="bg-green-300 p-2 rounded text-2xl cursor-pointer"
+            />
+          </div>
+        </form>
+      </div>
+
+      <% }else{%>
+      <div class="flex text-2xl items-center justify-center my-10">
+        Please Add Some Student
+      </div>
+      <%}%>
+    </div>
+    <script>
+      let radios = document.querySelector("#radio");
+    </script>
+  </body>
+</html>

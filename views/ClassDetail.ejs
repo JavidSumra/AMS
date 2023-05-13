@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Class Detail</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      table,
+      td,
+      th {
+        padding: 10px;
+      }
+      body {
+        background: #f1f5f9;
+      }
+    </style>
+    <script>
+      const attencdanceFill = (id, status) => {
+        console.log("Click");
+        fetch(`/Attendance/${id}`, {
+          method: "POST",
+          body: JSON.stringify({ Status: status,Id:<%=classdetail.id%> }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((ok) => {
+            console.log("Executed");
+            if (ok) {
+              window.location.reload();
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      };
+    </script>
+  </head>
+  <body>
+    <div class="h-screen font-medium md:block hidden">
+      <%-include ("./message.ejs")%>
+      <div class="navBar bg-white m-2 rounded p-2 flex text-2xl">
+        <div
+          class="w-full border-r border-black p-2 flex items-center justify-center"
+        >
+          Class Name: <%=classdetail.ClassName%>
+        </div>
+        <div
+          class="w-full border-r border-black p-2 flex items-center justify-center"
+        >
+          Total Student: <%=students.length%>
+        </div>
+        <div
+          class="w-full border-r border-black p-2 flex items-center justify-center"
+        >
+          Class Time:<%=classdetail.StartTime%> - <%=classdetail.EndTime%>
+        </div>
+
+        <div class="button w-full flex items-end justify-end">
+          <div
+            class="add cursor-pointer flex items-center justify-end p-2 rounded bg-green-300 m-2"
+          >
+            <a href="/Student/<%=classdetail.id%>" class="text-center"
+              >Student List</a
+            >
+          </div>
+          <div
+            class="add cursor-pointer flex items-center justify-end p-2 rounded bg-green-300 m-2"
+          >
+            <a
+              href="/Attendance/Recorde/<%=classdetail.id%>/<%=today%>"
+              class="text-center"
+              >Check Record</a
+            >
+          </div>
+          <div
+            class="add cursor-pointer flex items-center justify-end p-2 rounded bg-green-300 m-2"
+          >
+            <a href="/Home/Login" class="text-center">Go Back</a>
+          </div>
+        </div>
+      </div>
+      <form
+        action="/AddNewStudent/<%=classdetail.id%>"
+        method="post"
+        class="bg-slate-300 grid grid-cols-4"
+      >
+        <div class="inline-block border-r-2 p-2">
+          <label for="sname" class="text-xl block">Student Name:</label>
+          <input
+            type="text"
+            name="studentName"
+            id="sname"
+            class="p-2 border-b-2 border-black outline-none w-full"
+            placeholder="Enter Student Name"
+          />
+        </div>
+        <div class="inline-block border-r-2 p-2">
+          <label for="snum" class="text-xl block">Student Number:</label>
+          <input
+            type="text"
+            name="studentNumber"
+            id="snum"
+            class="p-2 border-b-2 border-black outline-none w-full"
+            placeholder="Enter Student Number"
+            required
+          />
+        </div>
+        <div class="inline-block border-r-2 p-2">
+          <label for="pnum" class="text-xl block">Parent Number:</label>
+          <input
+            type="text"
+            name="parentNumber"
+            id="pnum"
+            class="p-2 border-b-2 border-black outline-none w-full"
+            placeholder="Enter Parent Number"
+            required
+          />
+        </div>
+
+        <div class="flex items-center justify-center">
+          <button type="submit" class="p-2 bg-green-400 text-3xl rounded">
+            Add
+          </button>
+        </div>
+      </form>
+
+      <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <% if ( students.length > 0 ) { %>
+        <div class="text-2xl text-center my-4">
+          Mark Attendance - <%=today%>
+        </div>
+        <table class="w-full text-center font-medium text-gray-500">
+          <thead
+            class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+          >
+            <tr class="bg-slate-400">
+              <th scope="col" class="px-6 py-3">No</th>
+              <th scope="col" class="px-6 py-3">Student Name</th>
+              <th scope="col" class="px-6 py-3">Student Number</th>
+              <th scope="col" class="px-6 py-3">Parents Number</th>
+              <th scope="col" class="px-6 py-3">Attendance</th>
+              <th scope="col" class="px-6 py-3">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% for(let i = 0;i < students.length;i++){%>
+
+            <tr>
+              <td><%=i+1%></td>
+              <td><%=students[i].SName%></td>
+              <td><%=students[i].SNumber%></td>
+              <td><%=students[i].PNumber%></td>
+              <td>10</td>
+
+              <% if(attendance[i]?.Status=='true' && attendance[i]?.userId ==
+              students[i].id){%>
+              <td>
+                <button class="text-2xl rounded-xl p-2 text-white bg-green-500">
+                  Present
+                </button>
+              </td>
+              <%}else if(attendance[i]?.Status=='false' && attendance[i]?.userId
+              == students[i].id){%>
+              <td>
+                <button class="text-2xl rounded-xl p-2 text-white bg-red-500">
+                  Absent
+                </button>
+              </td>
+              <% }else{%>
+              <td>
+                <button
+                  class="bg-green-500 text-xl p-2 rounded mx-2 text-white"
+                  title="Present"
+                  onclick="attencdanceFill(<%=students[i].id%>,true)"
+                >
+                  P
+                </button>
+                <button
+                  class="bg-red-500 text-xl p-2 rounded mx-2 text-white"
+                  title="Absent"
+                  onclick="attencdanceFill(<%=students[i].id%>,false)"
+                >
+                  A
+                </button>
+              </td>
+              <%}%> <%}%>
+            </tr>
+          </tbody>
+        </table>
+        <% }else{%>
+        <div class="flex text-2xl items-center justify-center my-10">
+          Please Add Some Student
+        </div>
+        <%}%>
+      </div>
+    </div>
+    <div class="flex flex-wrap gap-4 md:hidden">
+      <nav class="bg-gray-50 dark:bg-gray-700 w-screen">
+        <div class="max-w-screen-xl px-4 py-3 mx-auto">
+          <div class="flex items-center justify-evenly">
+            <ul class="flex flex-row font-medium mt-0 mr-6 space-x-8 text-sm">
+              <li>
+                <a
+                  href="/Student/<%=classdetail.id%>"
+                  class="text-gray-900 dark:text-white hover:underline"
+                  aria-current="page"
+                  >Student List</a
+                >
+              </li>
+              <li>
+                <a
+                  href="/Attendance/Recorde/<%=classdetail.id%>/<%=today%>"
+                  class="text-gray-900 dark:text-white hover:underline"
+                  >Check Record</a
+                >
+              </li>
+              <li>
+                <a
+                  href="/Home/Login"
+                  class="text-gray-900 dark:text-white hover:underline"
+                  >Go Back</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      <div class="dash">
+        <% students.map((student,index)=>{%>
+
+        <div class="bg-white p-4 rounded-lg shadow text-lg w-max m-2">
+          <div class="flex itmes-center space-x-2 text-center">
+            <div>
+              <a class="text-blue-500 font-bold hover:underline"
+                ><%=index+1%></a
+              >
+            </div>
+            <div class="text-gray-500">
+              <a><%=student.SName%></a>
+            </div>
+          </div>
+          <div class="w-max">
+            <div>
+              Attendance: <% if(attendance[index]?.Status=='true' &&
+              attendance[index]?.userId == student.id){%>
+              <td>
+                <button class="text-2xl rounded-xl p-2 text-white bg-green-500">
+                  Present
+                </button>
+              </td>
+              <%}else if(attendance[index]?.Status=='false' &&
+              attendance[index]?.userId == student.id){%>
+              <td>
+                <button class="text-2xl rounded-xl p-2 text-white bg-red-500">
+                  Absent
+                </button>
+              </td>
+              <% }else{%>
+
+              <button
+                class="bg-green-500 text-xl p-2 rounded mx-2 text-white"
+                title="Present"
+                onclick="attencdanceFill(<%=student.id%>,true)"
+              >
+                P
+              </button>
+              <button
+                class="bg-red-500 text-xl p-2 rounded mx-2 text-white"
+                title="Absent"
+                onclick="attencdanceFill(<%=student.id%>,false)"
+              >
+                A
+              </button>
+              <%}%>
+            </div>
+            <div>
+              Total Presence: <span class="text-xl text-red-500">10</span>
+            </div>
+          </div>
+        </div>
+        <% })%>
+      </div>
+    </div>
+  </body>
+</html>
