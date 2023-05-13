@@ -95,20 +95,35 @@ app.use(function (request, response, next) {
 let today = new Date().toLocaleDateString("en-In");
 
 app.get("/", (request, response) => {
-  response.render("Login");
+  try {
+    response.render("Login");
+  } catch (error) {
+    console.log(`Error:${error}`);
+    response.send(error);
+  }
 });
 
 app.get("/SignUp", (request, response) => {
-  response.render("SignUp");
+  try {
+    response.render("SignUp");
+  } catch (error) {
+    console.log(`Error:${error}`);
+    response.send(error);
+  }
 });
 
 app.get(
   "/Home/Login",
   ensureLogin.ensureLoggedIn({ redirectTo: "/" }),
   async (request, response) => {
-    let User = request.user,
-      classList = await classDetail.getClass(String(request.user.id));
-    response.render("Home", { today, User, classList });
+    try {
+      let User = request.user,
+        classList = await classDetail.getClass(String(request.user.id));
+      response.render("Home", { today, User, classList });
+    } catch (error) {
+      console.log(`Error:${error}`);
+      response.send(error);
+    }
   }
 );
 
@@ -116,13 +131,18 @@ app.get(
   "/AddNew/Class",
   ensureLogin.ensureLoggedIn({ redirectTo: "/" }),
   (request, response) => {
-    response.render("AddClass");
+    try {
+      response.render("AddClass");
+    } catch (error) {
+      console.log(`Error:${error}`);
+      response.send(error);
+    }
   }
 );
 
 app.get(
   "/ClassDetail/:id",
-
+  ensureLogin.ensureLoggedIn({ redirectTo: "/" }),
   async (request, response) => {
     try {
       let classdetail = await classDetail.findByPk(request.params.id);
@@ -153,39 +173,50 @@ app.get(
       let Class = await classDetail.findByPk(request.params.id);
       response.render("AddStudent", { Class });
     } catch (error) {
+      console.log(`Error:${error}`);
       response.send(error);
     }
   }
 );
 
-app.get("/Add/Attendance/:id", async (request, response) => {
-  try {
-    let studentList = await studentDetail.getList(request.params.id);
-    console.log(studentList);
-    response.render("Attendace", {
-      students: studentList,
-      today,
-      Id: request.params.id,
-    });
-  } catch (error) {
-    response.status(404).send(error);
+app.get(
+  "/Add/Attendance/:id",
+  ensureLogin.ensureLoggedIn({ redirectTo: "/" }),
+  async (request, response) => {
+    try {
+      let studentList = await studentDetail.getList(request.params.id);
+      console.log(studentList);
+      response.render("Attendace", {
+        students: studentList,
+        today,
+        Id: request.params.id,
+      });
+    } catch (error) {
+      console.log(`Error:${error}`);
+      response.send(error);
+    }
   }
-});
+);
 
-app.get("/Student/:id", async (request, response) => {
-  try {
-    let students = await studentDetail.getList(request.params.id);
-    let classdetail = await classDetail.findByPk(request.params.id);
-    console.log(classdetail);
-    response.render("StudentList", { students, classdetail });
-  } catch (error) {
-    console.log("Error:" + error);
-    response.send(error);
+app.get(
+  "/Student/:id",
+  ensureLogin.ensureLoggedIn({ redirectTo: "/" }),
+  async (request, response) => {
+    try {
+      let students = await studentDetail.getList(request.params.id);
+      let classdetail = await classDetail.findByPk(request.params.id);
+      console.log(classdetail);
+      response.render("StudentList", { students, classdetail });
+    } catch (error) {
+      console.log(`Error:${error}`);
+      response.send(error);
+    }
   }
-});
+);
 
 app.get(
   "/Attendance/Recorde/:id/:day/:month/:year",
+  ensureLogin.ensureLoggedIn({ redirectTo: "/" }),
   async (request, response) => {
     try {
       let date = `${request.params.day}/${request.params.month}/${request.params.year}`;
@@ -201,7 +232,7 @@ app.get(
         presentStudent,
       });
     } catch (error) {
-      console.log("Error:" + error);
+      console.log(`Error:${error}`);
       response.send(error);
     }
   }
@@ -219,69 +250,78 @@ app.get(
         response.redirect("/");
       });
     } catch (error) {
-      console.log("Error:" + error);
-      response.status(402).send(error);
+      console.log(`Error:${error}`);
+      response.send(error);
     }
   }
 );
 
 app.post(
   "/Admin/Login",
+  ensureLogin.ensureLoggedIn({ redirectTo: "/" }),
   passport.authenticate("local", { failureFlash: true, failureRedirect: "/" }),
   (request, response) => {
-    let User = request.user;
-    response.redirect("/Home/Login");
+    try {
+      response.redirect("/Home/Login");
+    } catch (error) {
+      console.log(`Error:${error}`);
+      response.send(error);
+    }
   }
 );
 
-app.post("/Admin/Signup", async (request, response) => {
-  try {
-    let FindUser = await Teacher.getEmail(request.body.email.trim());
+app.post(
+  "/Admin/Signup",
+  ensureLogin.ensureLoggedIn({ redirectTo: "/" }),
+  async (request, response) => {
+    try {
+      let FindUser = await Teacher.getEmail(request.body.email.trim());
 
-    if (FindUser.length == 0) {
-      if (request.body.firstName.trim().length != 0) {
-        if (request.body.email.trim().length != 0) {
-          if (request.body.password.trim().length >= 8) {
-            let hashPass = await bcrypt.hash(
-              request.body.password.trim(),
-              saltRound
-            );
-            let User = await Teacher.create({
-              FirstName: request.body.firstName.trim(),
-              email: request.body.email.trim(),
-              password: hashPass,
-            });
-            console.log(
-              "User Created Successfully with Following Detail:\n" + User
-            );
-            request.login(User, (err) => {
-              if (err) {
-                console.log(err);
-              }
-              request.flash("success", "User Suceessfully Created");
-              return response.redirect("/Home/Login");
-            });
+      if (FindUser.length == 0) {
+        if (request.body.firstName.trim().length != 0) {
+          if (request.body.email.trim().length != 0) {
+            if (request.body.password.trim().length >= 8) {
+              let hashPass = await bcrypt.hash(
+                request.body.password.trim(),
+                saltRound
+              );
+              let User = await Teacher.create({
+                FirstName: request.body.firstName.trim(),
+                email: request.body.email.trim(),
+                password: hashPass,
+              });
+              console.log(
+                "User Created Successfully with Following Detail:\n" + User
+              );
+              request.login(User, (err) => {
+                if (err) {
+                  console.log(err);
+                }
+                request.flash("success", "User Suceessfully Created");
+                return response.redirect("/Home/Login");
+              });
+            } else {
+              request.flash("error", "Password Length Must Greter than 8");
+              response.redirect("back");
+            }
           } else {
-            request.flash("error", "Password Length Must Greter than 8");
+            request.flash("error", "Please Provide Email");
             response.redirect("back");
           }
         } else {
-          request.flash("error", "Please Provide Email");
+          request.flash("error", "Please Provide First Name");
           response.redirect("back");
         }
       } else {
-        request.flash("error", "Please Provide First Name");
+        request.flash("error", "Email Already Exist");
         response.redirect("back");
       }
-    } else {
-      request.flash("error", "Email Already Exist");
-      response.redirect("back");
+    } catch (error) {
+      console.log(`Error:${error}`);
+      response.send(error);
     }
-  } catch (error) {
-    console.log("Error" + error);
-    response.send(error);
   }
-});
+);
 
 app.post(
   "/AddNewClass",
@@ -294,6 +334,8 @@ app.post(
     let getClassList = await classDetail.getClass(new String(request.user.id));
     let sTime = TimeConvert(request.body.startTime);
     let eTime = TimeConvert(request.body.endTime);
+    console.log(sTime);
+    console.log(eTime);
     getClassList.map((item) => {
       if (
         (item.StartTime < sTime && sTime < item.EndTime) ||
@@ -329,8 +371,8 @@ app.post(
         response.redirect("back");
       }
     } catch (error) {
-      console.log("Error:" + error);
-      response.json(error);
+      console.log(`Error:${error}`);
+      response.send(error);
     }
   }
 );
@@ -356,67 +398,83 @@ app.post(
         response.redirect("back");
       }
     } catch (error) {
-      console.log("Error:" + error);
-      response.json(error);
+      console.log(`Error:${error}`);
+      response.send(error);
     }
   }
 );
 
-app.post("/Attendance/:id", async (request, response) => {
-  try {
-    console.log(request.body);
-    console.log(request.params.id);
-    let studentName = await studentDetail.getStudentName(request.params.id);
-    console.log(studentName.SName);
-    let attendanceDetail = await Attendance.create({
-      Name: studentName.SName,
-      studentClassId: request.body.Id,
-      Status: request.body.Status,
-      Date: today,
-      userId: request.params.id,
-    });
-    console.log(attendanceDetail);
-    return response.json(attendanceDetail ? true : false);
-  } catch (error) {
-    console.log(`Error:${error}`);
-    response.send(error);
-  }
-});
-app.delete("/Delete/Batch/:id", async (request, response) => {
-  try {
-    let DeleteBatch = await classDetail.Removebatch(
-      String(request.user.id),
-      String(request.params.id)
-    );
-    let deleteStudent = await studentDetail.removeStudent(request.params.id);
-    if (DeleteBatch) {
-      request.flash("success", "Successfully Deleted");
-    } else {
-      request.flash("error", "Failed To Delete");
+app.post(
+  "/Attendance/:id",
+  ensureLogin.ensureLoggedIn({ redirectTo: "/" }),
+  async (request, response) => {
+    try {
+      console.log(request.body);
+      console.log(request.params.id);
+      let studentName = await studentDetail.getStudentName(request.params.id);
+      console.log(studentName.SName);
+      let attendanceDetail = await Attendance.create({
+        Name: studentName.SName,
+        studentClassId: request.body.Id,
+        Status: request.body.Status,
+        Date: today,
+        userId: request.params.id,
+      });
+      console.log(attendanceDetail);
+      return response.json(attendanceDetail ? true : false);
+    } catch (error) {
+      console.log(`Error:${error}`);
+      response.send(error);
     }
-    // response.redirect(`/Delete/student/${request.params.id}`);
-    return response.send(DeleteBatch ? true : false);
-  } catch (error) {
-    console.log("Error:" + error);
   }
-});
+);
+app.delete(
+  "/Delete/Batch/:id",
+  ensureLogin.ensureLoggedIn({ redirectTo: "/" }),
+  async (request, response) => {
+    try {
+      let DeleteBatch = await classDetail.Removebatch(
+        String(request.user.id),
+        String(request.params.id)
+      );
+      let deleteStudent = await studentDetail.removeStudent(request.params.id);
+      if (DeleteBatch) {
+        request.flash("success", "Successfully Deleted");
+      } else {
+        request.flash("error", "Failed To Delete");
+      }
+      // response.redirect(`/Delete/student/${request.params.id}`);
+      return response.send(DeleteBatch ? true : false);
+    } catch (error) {
+      console.log(`Error:${error}`);
+      response.send(error);
+    }
+  }
+);
 
-app.delete("/Delete/student/:id", async (request, response) => {
-  try {
-    let deleteStudent = await studentDetail.deleteStudent(request.params.id);
-    let attendanceDelete = await Attendance.deleteAttendance(request.params.id);
-    console.log(attendanceDelete);
-    console.log(deleteStudent);
-    if (deleteStudent) {
-      request.flash("success", "Successfully Deleted");
-    } else {
-      request.flash("error", "Failed To Delete");
+app.delete(
+  "/Delete/student/:id",
+  ensureLogin.ensureLoggedIn({ redirectTo: "/" }),
+  async (request, response) => {
+    try {
+      let deleteStudent = await studentDetail.deleteStudent(request.params.id);
+      let attendanceDelete = await Attendance.deleteAttendance(
+        request.params.id
+      );
+      console.log(attendanceDelete);
+      console.log(deleteStudent);
+      if (deleteStudent) {
+        request.flash("success", "Successfully Deleted");
+      } else {
+        request.flash("error", "Failed To Delete");
+      }
+      return response.send(deleteStudent ? true : false);
+    } catch (error) {
+      console.log(`Error:${error}`);
+      response.send(error);
     }
-    return response.send(deleteStudent ? true : false);
-  } catch (error) {
-    console.log("Error:" + error);
   }
-});
+);
 
 //! Time Conversion Function from 24 Hrs to 12 Hrs
 
