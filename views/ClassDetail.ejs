@@ -233,6 +233,41 @@
           </div>
         </div>
       </nav>
+      <div class="form flex items-center justify-center">
+        <form
+          action="/AddNewStudent/<%=classdetail.id%>"
+          method="post"
+          class="bg-white rounded p-2 m-2"
+        >
+          <header class="text-center">Add Student</header>
+          <label for="name">Student Name:</label>
+          <input
+            type="text"
+            name="studentName"
+            class="border-black rounded border-1 bg-gray-200 p-1 w-full outline-none shadow focus:ring-1 focus::ring-blue-400"
+          />
+          <label for="name">Student Number:</label>
+          <input
+            type="number"
+            name="studentNumber"
+            class="border-black rounded border-1 bg-gray-200 p-1 w-full outline-none shadow focus:ring-1 focus::ring-blue-400"
+          />
+          <label for="name">Parent Number:</label>
+          <input
+            type="number"
+            name="parentNumber"
+            class="border-black rounded border-1 bg-gray-200 p-1 w-full outline-none shadow focus:ring-1 focus::ring-blue-400"
+          />
+          <div class="button flex justify-center items-center">
+            <button
+              type="submit"
+              class="bg-blue-400 hover:bg-blue-600 text-xl m-2 rounded p-2 text-white"
+            >
+              Add
+            </button>
+          </div>
+        </form>
+      </div>
       <div class="dash">
         <% students.map((student,index)=>{%>
 

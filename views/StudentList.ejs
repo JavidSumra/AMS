@@ -36,8 +36,8 @@
       };
     </script>
   </head>
-  <body class="bg-slate">
-    <div class="bg-slate-100">
+  <body>
+    <div class="bg-slate-100 hidden md:block">
       <div class="navBar bg-white m-2 rounded p-2 flex text-2xl">
         <div
           class="w-full border-r border-black p-2 flex items-center justify-center"
@@ -66,7 +66,9 @@
         </div>
       </div>
     </div>
-    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <div
+      class="relative overflow-x-auto shadow-md sm:rounded-lg hidden md:block"
+    >
       <% if ( students.length > 0 ) { %>
       <table class="w-full text-center font-medium text-gray-500">
         <thead
@@ -128,6 +130,88 @@
         Please Add Some Student
       </div>
       <%}%>
+    </div>
+    <div class="flex flex-wrap gap-4 md:hidden">
+      <nav class="bg-gray-50 dark:bg-gray-700 w-screen">
+        <div class="max-w-screen-xl px-4 py-3 mx-auto">
+          <div class="flex items-center justify-evenly">
+            <ul class="flex flex-row font-medium mt-0 mr-6 space-x-8 text-sm">
+              <li>
+                <p class="text-gray-900 dark:text-white hover:underline">
+                  Class Name: <%=classdetail.ClassName%>
+                </p>
+              </li>
+              <li>
+                <a class="text-gray-900 dark:text-white hover:underline"
+                  >Total Student : <%=students.length%></a
+                >
+              </li>
+              <li>
+                <a
+                  href="/classDetail/<%=classdetail.id%>"
+                  class="text-gray-900 dark:text-white hover:underline"
+                  >Go Back</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      <% students.map((student,index)=>{ %>
+      <div class="bg-white p-4 rounded-lg shadow text-lg w-max m-2">
+        <div class="flex itmes-center space-x-2 text-center">
+          <div>
+            <a class="text-blue-500 font-bold hover:underline"><%=index+1%></a>
+          </div>
+          <div class="text-gray-500">
+            <span><%=student.SName%></span>
+          </div>
+        </div>
+        <div class="w-max">
+          <div>
+            Student Number
+            <a
+              href="tel:<%=student.SNumber%>"
+              class="text-xl text-gray-600"
+              onclick=""
+              ><%=student.SNumber%></a
+            >
+          </div>
+          <div>
+            Parent Number:
+            <a href="tel:<%=student.PNumber%>" class="text-xl text-gray-500"
+              ><%=student.PNumber%></a
+            >
+          </div>
+        </div>
+        <div class="flex w-max">
+          <span
+            title=" Delete-<%=student.id%>"
+            onclick="deleteStudent(<%=student.id%>)"
+          >
+            <svg
+              title="Delete-<%=student.id%>"
+              style="color: red"
+              xmlns="http://www.w3.org/2000/svg"
+              width="23"
+              height="23"
+              fill="currentColor"
+              class="bi bi-trash"
+              viewBox="0 0 16 16"
+            >
+              <path
+                d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"
+                fill="red"
+              ></path>
+              <path
+                fill-rule="evenodd"
+                d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"
+                fill="red"
+              ></path></svg
+          ></span>
+        </div>
+      </div>
+      <%})%>
     </div>
   </body>
 </html>
