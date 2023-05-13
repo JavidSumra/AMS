@@ -10,10 +10,10 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
     }
-    static getList(id) {
+    static getList(classId) {
       return this.findAll({
         where: {
-          classId: id,
+          classId,
         },
         order: [["id", "ASC"]],
       });
