@@ -157,7 +157,7 @@
           </div>
         </div>
       </nav>
-      <% students.map((student,index)=>{ %>
+      <% if (students.length>0){%> <% students.map((student,index)=>{ %>
       <div class="bg-white p-4 rounded-lg shadow text-lg w-max m-2">
         <div class="flex itmes-center space-x-2 text-center">
           <div>
@@ -211,7 +211,13 @@
           ></span>
         </div>
       </div>
-      <%})%>
+      <%})%> <%}else{%>
+      <div
+        class="flex items-center text-center justify-center p-2 text-2xl bg-white w-full my-4 rounded"
+      >
+        Please Add Some Students
+      </div>
+      <%}%>
     </div>
   </body>
 </html>
