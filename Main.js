@@ -27,6 +27,8 @@ app.use(
     cookie: {
       maxAge: 60 * 60 * 24 * 1000, //24 Hours
     },
+    saveUninitialized: true,
+    resave: false,
   })
 );
 // Setup View Engine
@@ -258,10 +260,11 @@ app.get(
 
 app.post(
   "/Admin/Login",
-  ensureLogin.ensureLoggedIn({ redirectTo: "/" }),
+
   passport.authenticate("local", { failureFlash: true, failureRedirect: "/" }),
   (request, response) => {
     try {
+      console.log("User");
       response.redirect("/Home/Login");
     } catch (error) {
       console.log(`Error:${error}`);
@@ -272,7 +275,7 @@ app.post(
 
 app.post(
   "/Admin/Signup",
-  ensureLogin.ensureLoggedIn({ redirectTo: "/" }),
+
   async (request, response) => {
     try {
       let FindUser = await Teacher.getEmail(request.body.email.trim());
