@@ -10,6 +10,11 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
     }
+    updatePass(Password) {
+      return this.update({
+        password: Password,
+      });
+    }
     static getEmail(email) {
       return this.findAll({
         where: {

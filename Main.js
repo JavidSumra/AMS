@@ -129,6 +129,14 @@ app.get(
   }
 );
 
+app.get("/resetPassword", (request, response) => {
+  try {
+    response.render("Password");
+  } catch (error) {
+    console.log(`Error:${error}`);
+    response.send(error);
+  }
+});
 app.get(
   "/AddNew/Class",
   ensureLogin.ensureLoggedIn({ redirectTo: "/" }),
@@ -406,6 +414,31 @@ app.post(
     }
   }
 );
+
+app.post("/user/ChangePassword", async (request, response) => {
+  try {
+    let findUser = await Teacher.getEmail(request.body.email);
+    let newPass = request.body.password;
+    console.log(findUser);
+    if (findUser.length > 0) {
+      if (newPass.length >= 8) {
+        let hashPass = await bcrypt.hash(newPass, saltRound);
+        await findUser[0].updatePass(hashPass);
+        request.flash("success", "Password Changed");
+        response.redirect("/");
+      } else {
+        request.flash("error", "Password Length Must Greater Than 8");
+        response.redirect("back");
+      }
+    } else {
+      request.flash("error", "User Not Found Please Signup");
+      response.redirect("/Signup");
+    }
+  } catch (error) {
+    console.log(`Error:${error}`);
+    response.send(error);
+  }
+});
 
 app.post(
   "/Attendance/:id",
